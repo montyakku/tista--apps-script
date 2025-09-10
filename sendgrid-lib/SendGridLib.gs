@@ -37,17 +37,18 @@ function findContactByEmail(email) {
   return null;
 }
 
-function createContact(email) {
+function createContact(email, fields = {}) {
   if (!SENDGRID_API_KEY) {
     throw new Error('SENDGRID_API_KEY not configured in library properties');
   }
   
   const url = `${SENDGRID_BASE_URL}/contactdb/recipients`;
-  const payload = [
-    {
-      email: email
-    }
-  ];
+  const contactData = {
+    email: email,
+    ...fields
+  };
+  
+  const payload = [contactData];
   
   const options = {
     method: 'POST',
@@ -68,26 +69,18 @@ function createContact(email) {
   throw new Error('Failed to create contact');
 }
 
-function updateContactCustomField(contactId, customField, value) {
+function updateContactFields(email, fields) {
   if (!SENDGRID_API_KEY) {
     throw new Error('SENDGRID_API_KEY not configured in library properties');
   }
   
-  // Legacy APIでは、custom fieldをrecipient更新時に直接指定
+  // Legacy APIでは、fieldをrecipient更新時に直接指定
   const url = `${SENDGRID_BASE_URL}/contactdb/recipients`;
-  const customFields = {};
-  customFields[customField] = formatDate_(value);
-  
-  // contactIdからemailを取得する必要がある（Legacy APIの制約）
-  const contact = findContactById(contactId);
-  if (!contact) {
-    throw new Error(`Contact with ID ${contactId} not found`);
-  }
   
   const payload = [
     {
-      email: contact.email,
-      ...customFields
+      email: email,
+      ...fields
     }
   ];
   
@@ -101,7 +94,8 @@ function updateContactCustomField(contactId, customField, value) {
   };
   
   const response = UrlFetchApp.fetch(url, options);
-  Logger.log(`Updated ${customField} for contact ${contactId}`);
+  const fieldNames = Object.keys(fields).join(', ');
+  Logger.log(`Updated ${fieldNames} for contact ${email}`);
   
   return response.getResponseCode() === 200 || response.getResponseCode() === 201;
 }
@@ -127,24 +121,24 @@ function findContactById(contactId) {
   return data;
 }
 
-function updateContact(email, customField, value) {
+function updateContact(email, fields, createOnlyFields = {}) {
   try {
     let contactId = findContactByEmail(email);
     
     if (!contactId) {
-      contactId = createContact(email);
-    }
-    
-    if (contactId) {
-      return updateContactCustomField(contactId, customField, value);
+      // 新規作成時は両方のfieldsを使用
+      const allFields = { ...fields, ...createOnlyFields };
+      contactId = createContact(email, allFields);
+      return contactId ? true : false;
+    } else {
+      // 既存の場合は通常のfieldsのみ更新
+      return updateContactFields(email, fields);
     }
     
   } catch (error) {
     Logger.log(`Error updating contact ${email}: ${error.message}`);
     throw error;
   }
-  
-  return false;
 }
 
 function searchContacts(email) {
@@ -378,15 +372,3 @@ function scheduleCampaign(campaignId, scheduledTime) {
   }
 }
 
-function formatDate_(date) {
-  // 日本時間として受け取った日付をDateオブジェクトに変換
-  const dateString = date.toString();
-  
-  // 日本時間として解釈してDateオブジェクト作成
-  const dateObj = dateString.includes('+') || dateString.includes('Z') 
-    ? new Date(date) 
-    : new Date(dateString + '+09:00'); // JSTタイムゾーン付加
-  
-  // Unixtimestamp（秒）を返す
-  return Math.floor(dateObj.getTime() / 1000);
-}

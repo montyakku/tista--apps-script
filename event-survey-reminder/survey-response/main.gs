@@ -20,12 +20,16 @@ function onFormSubmit(e) {
   const row = e.range.getRow();
   
   const email = sheet.getRange(row, COLUMN_POSITIONS.EMAIL).getValue();
+  // Date型で取得される
   const responseDate = sheet.getRange(row, COLUMN_POSITIONS.EVENT_DATE).getValue();
   
   if (email && responseDate) {
     try {
       Logger.log(`Processing survey response: ${email}, ${responseDate}`);
-      const result = SendGridLibrary.updateContact(email, CUSTOM_FIELDS.LAST_SURVEY_EVENT_DATE, responseDate);
+      const responseTimestamp = Math.floor(responseDate.getTime() / 1000);
+      const fields = {};
+      fields[CUSTOM_FIELDS.LAST_SURVEY_EVENT_DATE] = responseTimestamp;
+      const result = SendGridLibrary.updateContact(email, fields);
       
       if (result) {
         Logger.log(`✓ Successfully updated contact ${email} with last_survey_event_date`);
