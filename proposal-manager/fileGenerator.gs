@@ -1,5 +1,5 @@
-function main() {
-  // メイン関数で処理するテンプレートファイルIDを指定
+function generateFilesFromTemplates() {
+  // テンプレートファイルIDを指定
   const templateFileIds = [
     "1p7sdbnPZEWrDxzPWSDOpT63nbje8nXea", //告知
     "1naPnuFyaMQQlJj1ZhVLbmnLWhmZ114JJ", //当日メール

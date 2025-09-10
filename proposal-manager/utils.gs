@@ -100,22 +100,3 @@ function getMappingData() {
   return mapping;
 }
 
-/**
- * スプレッドシートから設定データを取得
- * @returns {Object|null} - 設定データ
- */
-function getSettingsFromSpreadsheet() {
-  const mapping = getMappingData();
-  if (!mapping) {
-    return null;
-  }
-
-  const settings = {
-    eventDate: mapping[MAPPING_KEYS.DATE],
-    surveyMailTitle: mapping[MAPPING_KEYS.SURVEY_MAIL_TITLE],
-    campaignTitlePrefix: mapping[MAPPING_KEYS.CAMPAIGN_TITLE_PREFIX],
-    mailSubject: mapping[MAPPING_KEYS.MAIL_SUBJECT]
-  };
-
-  return settings;
-}
