@@ -290,7 +290,7 @@ function createCampaignWithContent(campaignName, subject, textContent, segmentId
     title: campaignName,
     subject: subject,
     segment_ids: [segmentId],
-    html_content: (textContent || '').replace(/\n/g, '<br>')
+    html_content: textContent || ''
   };
   
   // Send to の設定（テスト用リストがある場合）

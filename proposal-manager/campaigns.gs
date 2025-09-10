@@ -1,64 +1,4 @@
-const MAPPING_KEYS = {
-  DATE: '<!--#DATE#-->',
-  SURVEY_MAIL_TITLE: '<!--#SURVEY_MAIL_TITLE#-->',
-  CAMPAIGN_TITLE_PREFIX: '<!--#CAMPAIGN_TITLE_PREFIX#-->'
-};
-
-const FILE_NAMES = {
-  SURVEY_EMAIL: '参加者アンケート.txt'
-};
-
-const SEGMENT_NAMES = {
-  SURVEY_PENDING: 'アンケート未回答'
-};
-
-const SENDGRID_IDS = {
-  TEST_LIST_ID: 23960160,  // 自社確認用contact list
-  UNSUBSCRIBE_GROUP_ID: 13279,  // 配信停止グループ
-  SENDER_ID: 3861584  // SendGrid管理画面で確認したSender ID
-};
-
-const REMINDER_MESSAGES = {
-  PREFIX: '先日ご案内いたしましたアンケートについて、リマインドのご連絡です。\n本メールは、まだご回答の確認が取れていない方にお送りしております。\nすでにご対応済みの場合は、行き違いにつきご容赦ください。\n\n'
-};
-
-
-function getEmailContentFromFile(fileName) {
-  try {
-    const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-    const folder = DriveApp.getFileById(spreadsheet.getId()).getParents().next();
-    
-    const files = folder.getFilesByName(fileName);
-    if (!files.hasNext()) {
-      Logger.log(`✗ File "${fileName}" not found in spreadsheet directory`);
-      return null;
-    }
-    
-    const file = files.next();
-    const content = file.getBlob().getDataAsString();
-    Logger.log(`✓ Successfully loaded content from "${fileName}"`);
-    return content;
-    
-  } catch (error) {
-    Logger.log(`✗ Error reading file "${fileName}": ${error.message}`);
-    return null;
-  }
-}
-
-function getSettingsFromSpreadsheet() {
-  const mapping = getMappingData();
-  if (!mapping) {
-    return null;
-  }
-
-  const settings = {
-    eventDate: mapping[MAPPING_KEYS.DATE],
-    surveyMailTitle: mapping[MAPPING_KEYS.SURVEY_MAIL_TITLE],
-    campaignTitlePrefix: mapping[MAPPING_KEYS.CAMPAIGN_TITLE_PREFIX]
-  };
-
-  return settings;
-}
+// 共通定数と設定関数はutils.gsで定義済み
 
 function createSurveyCampaigns() {
   Logger.log('=== Creating Survey Campaigns (Draft) ===');
@@ -69,11 +9,14 @@ function createSurveyCampaigns() {
     return null;
   }
 
-  const emailContent = getEmailContentFromFile(FILE_NAMES.SURVEY_EMAIL);
+  const emailContent = getFileContent(FILE_NAMES.SURVEY_EMAIL);
   if (!emailContent) {
     Logger.log('✗ Failed to load email content');
     return null;
   }
+  
+  // テキストコンテンツの改行を<br>タグに変換
+  const htmlEmailContent = emailContent.replace(/\n/g, '<br>');
 
   const eventDate = settings.eventDate;
   const subject = settings.surveyMailTitle;
@@ -138,7 +81,7 @@ function createSurveyCampaigns() {
     const survey1CampaignId = SendGridLibrary.createCampaignWithContent(
       survey1CampaignName, 
       subject, 
-      emailContent, 
+      htmlEmailContent, 
       segmentId, 
       SENDGRID_IDS.SENDER_ID,
       SENDGRID_IDS.UNSUBSCRIBE_GROUP_ID,
@@ -149,7 +92,7 @@ function createSurveyCampaigns() {
     // 2. アンケート2（リマインド）
     const survey2CampaignName = `${campaignPrefix}_アンケート2`;
     const reminderSubject = `【リマインド】${subject}`;
-    const reminderContent = REMINDER_MESSAGES.PREFIX + emailContent;
+    const reminderContent = REMINDER_MESSAGES.PREFIX.replace(/\n/g, '<br>') + htmlEmailContent;
     const survey2CampaignId = SendGridLibrary.createCampaignWithContent(
       survey2CampaignName, 
       reminderSubject, 
@@ -164,7 +107,7 @@ function createSurveyCampaigns() {
     // 3. アンケート3（最終リマインド）
     const survey3CampaignName = `${campaignPrefix}_アンケート3`;
     const finalReminderSubject = `【最終リマインド】${subject}`;
-    const finalReminderContent = REMINDER_MESSAGES.PREFIX + emailContent;
+    const finalReminderContent = REMINDER_MESSAGES.PREFIX.replace(/\n/g, '<br>') + htmlEmailContent;
     const survey3CampaignId = SendGridLibrary.createCampaignWithContent(
       survey3CampaignName, 
       finalReminderSubject, 

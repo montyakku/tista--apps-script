@@ -22,48 +22,6 @@ function main() {
   });
 }
 
-/**
- * スプレッドシートからマッピングデータを取得
- * @returns {Object|null} - マッピングデータ (キー: 置換対象文字列, 値: processedValue)
- */
-function getMappingData() {
-  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-  const sheetName = "自動生成用マッピング";
-  const sheet = spreadsheet.getSheetByName(sheetName);
-  if (!sheet) {
-    Logger.log(`シート "${sheetName}" が見つかりません。`);
-    return null;
-  }
-
-  const data = sheet.getDataRange().getValues();
-  const mapping = {};
-
-  data.forEach(row => {
-    const key = row[0]; // A列: 置換対象文字列
-    const value = String(row[1] || "" ); // B列: 置き換える文字列
-
-    const newlinePrefix = value === "" ? "" : row[2] || ""; // C列: 各行の先頭に付け加える文字列
-    const newlineSuffix = value === "" ? "" : row[3] || ""; // D列: 各行の末尾に付け加える文字列
-
-    // 改行の有無で処理を分岐
-    let processedValue;
-
-    if (value.includes("\n")) {
-      // 改行がある場合
-      processedValue = value
-        .split("\n")
-        .map(line => `${newlinePrefix}${line}${newlineSuffix || "<br />"}`)
-        .join("");
-    } else {
-      // 改行がない場合
-      processedValue = `${newlinePrefix}${value}${newlineSuffix}`;
-    }
-    mapping[key] = processedValue;
-  });
-
-  Logger.log("マッピングデータを正常に取得しました。");
-  return mapping;
-}
 
 /**
  * テンプレートファイルを処理して置換後のHTMLを出力
