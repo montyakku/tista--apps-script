@@ -1,7 +1,16 @@
+/**
+ * テンプレートファイル生成と開催告知メール更新を実行
+ */
+function generateAllFiles() {
+  generateFilesFromTemplates();
+  generateEventAnnouncementEmail();
+}
+
 function generateFilesFromTemplates() {
   // テンプレートファイルIDを指定
   const templateFileIds = [
-    "1p7sdbnPZEWrDxzPWSDOpT63nbje8nXea", //告知
+    "1sJQ2pcm9iuC88gbAipzIFLP8CPwR4c7f", //開催登告知本文.html
+    "1p7sdbnPZEWrDxzPWSDOpT63nbje8nXea", //開催告知メール.html
     "1naPnuFyaMQQlJj1ZhVLbmnLWhmZ114JJ", //当日メール
     "1xlqvNwUYkY5N1YIYICiE5aiyDhx5us0m", //X
     "1oQTn_hMbvxcLAlb5sV6QBZu1UsYs1Y6X", //スポット参加メール
@@ -21,7 +30,6 @@ function generateFilesFromTemplates() {
     processTemplateFile(fileId, mapping); // テンプレートファイルを処理
   });
 }
-
 
 /**
  * テンプレートファイルを処理して置換後のHTMLを出力
@@ -68,5 +76,63 @@ function processTemplateFile(templateFileId, mapping) {
     Logger.log(`テンプレートファイル (ID: ${templateFileId}) の置換処理が完了し、ファイル "${outputFileName}" がフォルダに出力されました。`);
   } catch (error) {
     Logger.log(`テンプレートファイル (ID: ${templateFileId}) の処理に失敗しました: ${error.message}`);
+  }
+}
+
+/**
+ * 開催告知メール.htmlを生成する
+ */
+function generateEventAnnouncementEmail() {
+  const EVENT_ANNOUNCEMENT_EMAIL_FILENAME = "開催告知メール.html";
+  const EVENT_ANNOUNCEMENT_BODY_FILENAME = "開催告知本文.html";
+  const CSS_FILE_ID = "1AOtB0imtHmnOGBnhOjerfL96lIUQxZsR";
+  
+  try {
+    Logger.log('=== 開催告知メール.html の生成を開始 ===');
+    
+    // スプレッドシートと同階層のファイルを取得
+    const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+    const folder = DriveApp.getFileById(spreadsheet.getId()).getParents().next();
+    
+    // 開催告知メール.htmlを取得
+    const baseFiles = folder.getFilesByName(EVENT_ANNOUNCEMENT_EMAIL_FILENAME);
+    if (!baseFiles.hasNext()) {
+      Logger.log(`✗ ${EVENT_ANNOUNCEMENT_EMAIL_FILENAME}が見つかりません`);
+      return;
+    }
+    const baseFile = baseFiles.next();
+    let htmlContent = baseFile.getBlob().getDataAsString();
+    Logger.log(`${EVENT_ANNOUNCEMENT_EMAIL_FILENAME}を取得しました`);
+    
+    // CSSファイルの内容を取得
+    const cssFile = DriveApp.getFileById(CSS_FILE_ID);
+    const cssContent = cssFile.getBlob().getDataAsString();
+    Logger.log('CSSファイルの内容を取得しました');
+    
+    // 開催告知本文.htmlを取得
+    const bodyFiles = folder.getFilesByName(EVENT_ANNOUNCEMENT_BODY_FILENAME);
+    if (!bodyFiles.hasNext()) {
+      Logger.log(`✗ ${EVENT_ANNOUNCEMENT_BODY_FILENAME}が見つかりません`);
+      return;
+    }
+    const bodyFile = bodyFiles.next();
+    const bodyContent = bodyFile.getBlob().getDataAsString();
+    Logger.log(`${EVENT_ANNOUNCEMENT_BODY_FILENAME}の内容を取得しました`);
+    
+    // /* CSS */ 部分を置換
+    htmlContent = htmlContent.replace(/\/\* CSS \*\//, cssContent);
+    Logger.log('/* CSS */ 部分を置換しました');
+    
+    // /* BODY */ 部分を開催告知本文.htmlの内容で置換
+    htmlContent = htmlContent.replace(/\/\* BODY \*\//, bodyContent);
+    Logger.log('/* BODY */ 部分を開催告知本文.htmlの内容で置換しました');
+    
+    // 既存の開催告知メール.htmlファイルを更新
+    baseFile.setContent(htmlContent);
+    
+    Logger.log(`✓ ${EVENT_ANNOUNCEMENT_EMAIL_FILENAME} の更新が完了しました`);
+    
+  } catch (error) {
+    Logger.log(`✗ 開催告知メール.htmlの生成に失敗しました: ${error.message}`);
   }
 }
