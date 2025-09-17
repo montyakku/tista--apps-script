@@ -85,7 +85,6 @@ function processTemplateFile(templateFileId, mapping) {
 function generateEventAnnouncementEmail() {
   const EVENT_ANNOUNCEMENT_EMAIL_FILENAME = "開催告知メール.html";
   const EVENT_ANNOUNCEMENT_BODY_FILENAME = "開催告知本文.html";
-  const CSS_FILE_ID = "1AOtB0imtHmnOGBnhOjerfL96lIUQxZsR";
   
   try {
     Logger.log('=== 開催告知メール.html の生成を開始 ===');
@@ -105,7 +104,7 @@ function generateEventAnnouncementEmail() {
     Logger.log(`${EVENT_ANNOUNCEMENT_EMAIL_FILENAME}を取得しました`);
     
     // CSSファイルの内容を取得
-    const cssFile = DriveApp.getFileById(CSS_FILE_ID);
+    const cssFile = DriveApp.getFileById(FILE_IDS.CSS_FILE_ID);
     const cssContent = cssFile.getBlob().getDataAsString();
     Logger.log('CSSファイルの内容を取得しました');
     

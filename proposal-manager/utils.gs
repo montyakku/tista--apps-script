@@ -10,7 +10,10 @@ const MAPPING_KEYS = {
   MAIL_SUBJECT: '<!--#MAIL_SUBJECT#-->',
   ANNOUNCEMENT_PAGE_URL: '<!--#ANNOUNCEMENT_PAGE_URL-->',
   ANNOUNCEMNT_BARREL_URL: '<!--#ANNOUNCEMNT_BARREL_URL#-->',
-  ANNOUNCEMNT_X_URL: '<!--#ANNOUNCEMNT_X_URL#-->'
+  ANNOUNCEMNT_X_URL: '<!--#ANNOUNCEMNT_X_URL#-->',
+  CAPTION_URL: '<!--#CAPTION_URL#-->',
+  POST_SLUG: '<!--#POST_SLUG#-->',
+  WP_MEDIA_ID: '<!--#WP_MEDIA_ID#-->'
 };
 
 const FILE_NAMES = {
@@ -31,6 +34,10 @@ const SENDGRID_IDS = {
 
 const REMINDER_MESSAGES = {
   PREFIX: '先日ご案内いたしましたアンケートについて、リマインドのご連絡です。\n本メールは、まだご回答の確認が取れていない方にお送りしております。\nすでにご対応済みの場合は、行き違いにつきご容赦ください。\n\n'
+};
+
+const FILE_IDS = {
+  CSS_FILE_ID: "1AOtB0imtHmnOGBnhOjerfL96lIUQxZsR"  // カスタムCSS用ファイル
 };
 
 /**

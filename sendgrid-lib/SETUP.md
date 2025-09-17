@@ -71,6 +71,8 @@
 5. 識別子を「SendGridLib」に設定
 
 ### コードでの使用例
+
+#### SendGrid使用例
 ```javascript
 // Contact更新
 SendGridLib.updateContact('test@example.com', 'last_event_attended_at', '2024-01-01');
@@ -85,7 +87,33 @@ const recipients = [
 SendGridLib.sendEmail('template-id', recipients, { event_date: '2024-01-01' });
 ```
 
+#### WordPress使用例
+```javascript
+// 必要なスクリプトプロパティを設定
+// WORDPRESS_SITE_URL: https://cellarr365.com
+// WORDPRESS_USERNAME: plan@tskru.com
+// WORDPRESS_APP_PASSWORD: アプリケーションパスワード
+
+// WordPress認証テスト
+const isConnected = SendGridLibrary.testAuth();
+
+// news投稿を作成（メディアID付き）
+const result = SendGridLibrary.createPost(
+  'イベント開催のお知らせ',
+  '<p>イベント詳細...</p>',
+  'draft',
+  'news',
+  123,  // メディアID
+  'event-announcement'  // スラッグ
+);
+
+// 設定ガイド表示
+SendGridLibrary.showConfigGuide();
+```
+
 ## 利用可能な関数
+
+### SendGrid関数
 
 | 関数名 | 説明 | 使用例 |
 |--------|------|--------|
@@ -93,6 +121,15 @@ SendGridLib.sendEmail('template-id', recipients, { event_date: '2024-01-01' });
 | `findContactByEmail(email)` | Contactを検索 | ContactID取得 |
 | `searchContacts(query)` | 複数Contact検索 | 条件検索 |
 | `sendEmail(templateId, recipients, data, from, fromName)` | メール送信 | キャンペーン送信 |
+
+### WordPress関数（wordpress.gs）
+
+| 関数名 | 説明 | 使用例 |
+|--------|------|--------|
+| `SendGridLibrary.createPost(title, content, status, postType, mediaId, slug)` | WordPress投稿作成 | ニュース投稿の作成 |
+| `SendGridLibrary.testAuth()` | WordPress認証テスト | 接続確認 |
+| `SendGridLibrary.testPostType(postType)` | 投稿タイプのテスト | カスタム投稿タイプ確認 |
+| `SendGridLibrary.showConfigGuide()` | 設定ガイド表示 | セットアップ支援 |
 
 ## セキュリティ
 - API Keyはライブラリ内で一元管理
