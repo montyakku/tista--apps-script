@@ -15,24 +15,35 @@ function getConfig(key) {
   return value;
 }
 
+/**
+ * 日付をYYYYMMDD形式にフォーマット
+ */
+function formatDateToYYYYMMDD(date) {
+  return Utilities.formatDate(date, 'Asia/Tokyo', 'yyyyMMdd');
+}
+
 function onFormSubmit(e) {
   const sheet = e.source.getActiveSheet();
   const row = e.range.getRow();
-  
+
   const email = sheet.getRange(row, COLUMN_POSITIONS.EMAIL).getValue();
   // Date型で取得される
   const responseDate = sheet.getRange(row, COLUMN_POSITIONS.EVENT_DATE).getValue();
-  
+
   if (email && responseDate) {
     try {
       Logger.log(`Processing survey response: ${email}, ${responseDate}`);
-      const responseTimestamp = Math.floor(responseDate.getTime() / 1000);
+
+      // YYYYMMDD形式に変換
+      const responseDateStr = formatDateToYYYYMMDD(responseDate);
+      Logger.log(`Formatted date: ${responseDateStr}`);
+
       const fields = {};
-      fields[CUSTOM_FIELDS.LAST_SURVEY_EVENT_DATE] = responseTimestamp;
+      fields[CUSTOM_FIELDS.LAST_SURVEY_EVENT_DATE] = responseDateStr;
       const result = SendGridLibrary.updateContact(email, fields);
-      
+
       if (result) {
-        Logger.log(`✓ Successfully updated contact ${email} with last_survey_event_date`);
+        Logger.log(`✓ Successfully updated contact ${email} with last_survey_event_date: ${responseDateStr}`);
       } else {
         Logger.log(`✗ Failed to update contact ${email}`);
       }

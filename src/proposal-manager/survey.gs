@@ -64,27 +64,30 @@ function createSurveyCampaigns() {
   Logger.log(`Survey3 scheduled: ${survey3ScheduleTime}`);
   
   try {
-    // 日本時間のイベント日はUTCでは前日になるため、前日をeqで指定
-    const eventDateStart = new Date(eventDateObj);
-    eventDateStart.setDate(eventDateObj.getDate() - 1);
-    
-    const startDateMMDDYYYY = Utilities.formatDate(eventDateStart, 'Asia/Tokyo', 'MM/dd/yyyy');
-    
+    // セグメント条件:
+    // recent_event_attended_dates にイベント日(YYYYMMDD)が含まれる
+    // AND last_survey_event_date < イベント日(YYYYMMDD)
+    //
+    // 注意:
+    // - TEXT型でもYYYYMMDD形式なら文字列比較で日付順になる (例: "20260110" < "20260113")
+    // - 空文字列も less than 判定で true になる (例: "" < "20260113")
     const segmentConditions = [
       {
-        field: 'last_event_attended_at',
-        operator: 'eq',
-        value: startDateMMDDYYYY,
+        field: 'recent_event_attended_dates',
+        operator: 'contains',
+        value: eventDateYYYYMMDD,
         and_or: ''
       },
       {
         field: 'last_survey_event_date',
-        operator: 'ne',
-        value: startDateMMDDYYYY,
+        operator: 'lt',
+        value: eventDateYYYYMMDD,
         and_or: 'and'
       }
     ];
-    
+
+    Logger.log(`Segment conditions: recent_event_attended_dates contains ${eventDateYYYYMMDD} AND last_survey_event_date < ${eventDateYYYYMMDD}`);
+
     const segmentName = `${eventDateYYYYMMDD}_${SEGMENT_NAMES.SURVEY_PENDING}`;
     const segmentId = SendGridLibrary.createSegment(segmentName, segmentConditions);
     
