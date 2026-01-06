@@ -18,7 +18,7 @@ const MAPPING_KEYS = {
 
 const FILE_NAMES = {
   SURVEY_EMAIL: '参加者アンケート.txt',
-  EVENT_ANNOUNCEMENT_TEMPLATE: 'SALON開催お知らせメール.html'
+  EVENT_ANNOUNCEMENT_TEMPLATE: '開催告知メール.html'
 };
 
 const SEGMENT_NAMES = {
