@@ -1,0 +1,14 @@
+{
+  "timeZone": "Asia/Tokyo",
+  "dependencies": {
+    "libraries": [
+      {
+        "userSymbol": "SendGridLibrary",
+        "libraryId": "1BWIR1FfQjvIjfvuuTFRSYfWaSOn4Wc7HuQ4uxRhAhDqO5Z3Q2J3BXbmb",
+        "version": "0"
+      }
+    ]
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8"
+}
