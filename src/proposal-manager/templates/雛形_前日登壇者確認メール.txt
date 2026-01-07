@@ -1,0 +1,50 @@
+
+件名: <!--#DATE#--> <!--#MAIN_TITLE#--> 登壇のご確認とご案内
+-------
+{宛名}
+
+いつも大変お世話になっております。
+CELLARR 運営事務局です。
+
+いよいよ明日となりました、
+<!--#MAIN_TITLE#--> へのご登壇、誠にありがとうございます。
+改めて、当日の詳細を以下にご案内させていただきます。ご確認のほど、何卒よろしくお願いいたします。
+
+
+■ イベント概要
+イベントタイトル： <!--#MAIN_TITLE#-->
+開催日時： <!--#DATE#--> <!--#TIME#-->
+集合時間（登壇者・運営）： <!--#ARRIVALl_TIME#-->
+
+会場：
+<!--#OFFLINE_PLACE_PLAIN_TEXT#-->
+<!--#ONLINE_PLACE_PLAIN_TEXT#-->
+Zoom URL：
+<!--#ZOOM_URL-->
+ミーティングID: <!--#ZOOM_MEETING_ID-->
+パスコード: <!--#ZOOM_PASSCODE-->
+
+
+■ タイムスケジュール
+<!--#TIME_TABLE_TXT-->
+
+
+■ 告知ページ
+・CELLARR：
+    <!--#ANNOUNCEMENT_PAGE_URL-->
+・X（旧Twitter）：
+    <!--#ANNOUNCEMNT_X_URL#-->
+・BARREL：
+    <!--#ANNOUNCEMNT_BARREL_URL#-->
+
+
+■ 緊急連絡先
+090-1147-2266（事務局 / 辻）
+
+―――――――――――――――――――――――――――――――
+ご不明な点やご質問等ございましたら、お気軽にご連絡くださいませ。
+それでは、明日お会いできるのを楽しみにしております。
+何卒よろしくお願い申し上げます。
+
+TSUKURU株式会社　https://tskru.jp/
+TisTa株式会社　https://tista.co.jp/

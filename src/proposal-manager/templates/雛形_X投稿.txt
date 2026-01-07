@@ -1,0 +1,48 @@
+🥃<!--#MAIN_TITLE#--> 開催決定！!    
+
+[テーマ]
+<!--#SUB_TITLE#-->
+
+[ゲスト]
+<!--#GUEST_TO_TXT#-->
+
+[開催日]
+<!--#DATE#--> <!--#TIME#-->
+
+[場所]
+<!--#ONLINE_PLACE_PLAIN_TEXT#-->
+<!--#OFFLINE_PLACE_PLAIN_TEXT#-->
+
+[申し込み期限]
+<!--#ONLINE_DEADLINE_IN_X#-->
+<!--#OFFLINE_DEADLINE_IN_X#-->
+
+参加希望の方は、リプライのGoogle フォームご応募下さい 
+
+#CELLARR #CELLARRSALON
+#ウイスキー #whiskey 
+#ジャパニーズウイスキー #japanesewhiskey
+
+----------
+[詳細ページ] 
+<!--#ANNOUNCEMENT_PAGE_URL-->
+
+[申し込みフォーム] 
+https://forms.gle/GmaiX8wKWvNyS55w9
+
+[オンライン参加料金] 
+有料会員様: <!--#ONLINE_MEMBER_PRICE#-->
+フリー会員様: <!--#ONLINE_SPOT_PRICE#--> 
+
+<!--#OFFLINE_PRICE#-->
+
+[会員登録リンク] 
+フリー会員(0円/月): https://cellarr365.com/membership-free/
+ライト会員(990円/月): https://cellarr365.com/membership-light/
+
+---------- # <!--#ONLINE_DEADLINE_IN_X#--> の２日前の20:00に予約設定
+[締切間近] 
+<!--#ONLINE_DEADLINE_IN_X#-->
+<!--#OFFLINE_DEADLINE_IN_X#-->
+
+参加をご検討中の方はお忘れなく。お申込みはリポスト参照👇

@@ -1,0 +1,170 @@
+    td {
+      border: none !important;
+    }
+
+    .red-text {
+      color: red;
+      font-weight: bold;
+    }
+
+    .to-name-text {
+      font-size: 16px;
+    }
+
+    .title-text {
+      font-size: 26px;
+      color: rgb(184, 60, 43);
+      font-weight: 700;
+    }
+
+    .sub-title-text {
+      font-size: 24px;
+      color: rgb(184, 60, 43);
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .join-subtitle {
+      margin: 0;
+      padding: 22px;
+      padding-bottom: 0;
+    }
+
+    .online-join-button,
+    .online-join-button:visited {
+      background-color: #d33633;
+      border: 1px solid #d33633;
+      border-radius: 0px;
+      color: #ffffff !important;
+      display: block;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 16px;
+      font-weight: normal;
+      letter-spacing: 0px;
+      line-height: 16px;
+      padding: 12px 18px;
+      text-align: center;
+      text-decoration: none;
+      margin: 10px auto;
+      width: fit-content;
+      /* ボタン幅をテキストに合わせる */
+    }
+
+    .offline-join-button,
+    .offline-join-button:visited {
+      background-color: #FFCB00;
+      border: 1px solid #FFCB00;
+      border-radius: 0px;
+      color: #ffffff !important;
+      display: block;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 16px;
+      font-weight: normal;
+      letter-spacing: 0px;
+      line-height: 16px;
+      padding: 12px 18px;
+      text-align: center;
+      text-decoration: none;
+      margin: 10px auto;
+      width: fit-content;
+      /* ボタン幅をテキストに合わせる */
+    }
+
+    .deadline-text {
+      line-height: 1.56;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 0;
+      font-size: 19px;
+      background-color: transparent;
+    }
+
+    .dotted-line {
+      border: none;
+      border-top: 1px dotted #333;
+      margin: 10px 0;
+    }
+
+    .sns-intro {
+      padding: 18px;
+      line-height: 22px;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    .tista-logo {
+      display: block;
+      margin: 10px auto;
+      max-width: 45%;
+      width: 45%;
+      height: auto;
+      color: #000000;
+      text-decoration: none;
+    }
+
+    .unsubscribe-description {
+      padding: 18px;
+      font-size: 11px;
+      margin: 0 0 10px;
+    }
+
+    .footer {
+      font-size: 12px;
+      line-height: 20px;
+      color: #444444;
+      padding: 16px;
+      text-align: center;
+    }
+
+    hr.thin-line {
+      height: 0.5px;
+      background-color: black;
+      border: none;
+    }
+
+    hr.standard-line {
+      height: 1.5px;
+      background-color: black;
+      border: none;
+    }
+
+    p {
+      margin: 0;
+      padding: 0;
+    }
+
+    contents {
+      text-align: center;
+      font-family: Arial, sans-serif;
+      font-size: 14.5px;
+      color: rgb(0, 0, 0);
+      font-weight: 400;
+      font-style: normal;
+      font-variant: normal;
+      white-space: normal;
+    }
+
+    table.wrapper {
+      width: 100% !important;
+      table-layout: fixed;
+      -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: 100%;
+      -moz-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+    }
+
+    img.max-width {
+      max-width: 100% !important;
+    }
+
+    @media screen and (max-width:480px) {
+      table.wrapper-mobile {
+        width: 100% !important;
+        table-layout: fixed;
+      }
+
+      img.max-width {
+        height: auto !important;
+        max-width: 480px !important;
+      }
+    }

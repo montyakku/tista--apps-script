@@ -1,5 +1,9 @@
 {
   "devDependencies": {
+    "@google/clasp": "^2.4.2",
     "javascript-obfuscator": "^5.1.0"
+  },
+  "scripts": {
+    "clasp": "clasp"
   }
 }

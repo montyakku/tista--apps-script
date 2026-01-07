@@ -1,0 +1,33 @@
+[%first_name | CELLARR SALON にご参加応募頂いた皆%] 様
+ 
+CELLARR 運営事務局です。
+この度は<!--#MAIN_TITLE#-->にご参加いただき、誠に感謝申し上げます。
+ 
+さて、SALON中にご案内のアンケートですが、
+登壇者、運営事務局に向けた忌憚のないご意見をお聞かせください。
+お手数ではございますが、本日から2日以内を目安にご回答いただけると助かります。
+ 
+▼以下リンクからアンケート回答お願い致します▼
+https://forms.gle/otVC3yWXWJd4zk6P6
+ 
+※既にご回答頂いている皆様はアンケート回答後にお手元に届いたコピーから、回答の編集も可能です。SALON直後と異なる、少し熟成した「想い」や「気づき」もあれば、そんな余韻もお伝え頂けるととても嬉しいです。
+ 
+今後、当イベントをより良い時間にしていく為に、率直なご意見を頂けましたら幸いです。
+引き続き、ご愛顧、ご指導を宜しくお願い申し上げます。
+
+CELLARR 運営事務局
+Mail:  info@tista.co.jp
+Web: https://tista.co.jp/
+ 
+※以下は皆さまにおいて、X等SNSを活用されていたら、ご覧頂けたら幸いです。
+　CELLARR: https://x.com/CELLARR_TisTa
+　SPEC: https://x.com/spec_tsukuru
+　代表 辻: https://x.com/tsujikichi
+ 
+※フォロー、いいね、RTなど頂けたら大変嬉しいです！
+
+----------
+[Sender_Name]
+[Sender_Address],[Sender_City],[Sender_State],[Sender_Zip]
+<a href="<%asm_group_unsubscribe_raw_url%>">Unsubscribe</a> - <a href="<%asm_preferences_raw_url%>">Unsubscribe Preferences</a>
+

@@ -1,0 +1,13 @@
+{
+  "templatesDir": "src/proposal-manager/templates",
+  "files": {
+    "雛形_開催告知本文.html": "1sJQ2pcm9iuC88gbAipzIFLP8CPwR4c7f",
+    "雛形_開催告知メール.html": "1p7sdbnPZEWrDxzPWSDOpT63nbje8nXea",
+    "雛形_X投稿.txt": "1xlqvNwUYkY5N1YIYICiE5aiyDhx5us0m",
+    "雛形_スポット参加費のお支払いメール.txt": "1oQTn_hMbvxcLAlb5sV6QBZu1UsYs1Y6X",
+    "雛形_参加者アンケート.txt": "12PZeHVzJ6i9bXtYzB_DjnMcvz9LwQRHi",
+    "雛形_前日参加者向けメール.txt": "1naPnuFyaMQQlJj1ZhVLbmnLWhmZ114JJ",
+    "雛形_前日登壇者確認メール.txt": "1Qud5HGHVtxq46U-l-7QKj38-cdJQJ20h",
+    "開催告知.css": "1AOtB0imtHmnOGBnhOjerfL96lIUQxZsR"
+  }
+}

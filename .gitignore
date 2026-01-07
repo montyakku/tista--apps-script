@@ -20,6 +20,9 @@ Thumbs.db
 # Clasp (authentication file only, keep .clasp.json in src/)
 .clasprc.json
 
+# Google API credentials
+.credentials/
+
 # Build output
 dist/
 
