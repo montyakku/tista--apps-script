@@ -1,6 +1,6 @@
 // === 設定エリア（ここを変更すれば他のシートにも使える） ===
 const TARGET_SHEET_NAME = "企画書";
-const DATE_CELL_REF = "B10";
+const DATE_CELL_REF = "B11";
 const FILENAME_PREFIX = "_企画書"; // ファイル名の後半に追加する文字列
 const EXCLUDED_KEYWORD = "雛形";   // この文字列がファイル名に入っていたらスキップ
 
