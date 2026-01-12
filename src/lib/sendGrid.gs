@@ -284,18 +284,27 @@ function createCampaignWithContent(campaignName, subject, textContent, segmentId
   
   Logger.log(`Creating campaign with text content length: ${textContent ? textContent.length : 0}`);
   Logger.log(`Text content preview: ${textContent ? textContent.substring(0, 100) + '...' : 'null'}`);
-  
+
   const url = `${SENDGRID_BASE_URL}/campaigns`;
   const payload = {
     title: campaignName,
     subject: subject,
-    segment_ids: [segmentId],
     html_content: textContent || ''
   };
-  
-  // Send to の設定（テスト用リストがある場合）
+
+  // Segment IDs の設定（指定がある場合）
+  if (segmentId) {
+    payload.segment_ids = [segmentId];
+  }
+
+  // List IDs の設定（指定がある場合）
   if (testListId) {
     payload.list_ids = [testListId];
+  }
+
+  // セグメントもリストも指定がない場合はエラー
+  if (!segmentId && !testListId) {
+    throw new Error('Either segmentId or testListId must be specified');
   }
   
   // Sender ID の設定

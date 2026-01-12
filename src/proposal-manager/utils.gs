@@ -28,8 +28,7 @@ const SEGMENT_NAMES = {
 const SENDGRID_IDS = {
   TEST_LIST_ID: 23960160,  // 自社確認用contact list
   UNSUBSCRIBE_GROUP_ID: 13279,  // 配信停止グループ
-  SENDER_ID: 3861584,  // SendGrid管理画面で確認したSender ID
-  SALON_PAST_PARTICIPANTS_SEGMENT_ID: 12858640  // 過去SALON参加者セグメント
+  SENDER_ID: 3861584  // SendGrid管理画面で確認したSender ID
 };
 
 const REMINDER_MESSAGES = {

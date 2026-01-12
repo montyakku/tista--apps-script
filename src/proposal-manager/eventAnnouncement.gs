@@ -31,7 +31,7 @@ function createEventAnnouncementCampaign() {
       campaignName,
       subject,
       htmlContent,
-      SENDGRID_IDS.SALON_PAST_PARTICIPANTS_SEGMENT_ID,
+      null, // セグメントIDは指定しない（リストIDのみ使用）
       SENDGRID_IDS.SENDER_ID,
       SENDGRID_IDS.UNSUBSCRIBE_GROUP_ID,
       SENDGRID_IDS.TEST_LIST_ID,
