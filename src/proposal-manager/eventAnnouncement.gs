@@ -11,9 +11,9 @@ function createEventAnnouncementCampaign() {
   }
   
   const campaignTitlePrefix = mapping[MAPPING_KEYS.CAMPAIGN_TITLE_PREFIX];
-  const emailSubject = mapping[MAPPING_KEYS.MAIL_SUBJECT];
+  const emailSubject = mapping[MAPPING_KEYS.ANNOUNCEMENT_TITLE];
   if (!campaignTitlePrefix || !emailSubject) {
-    Logger.log('✗ 必要な設定値が取得できませんでした（CAMPAIGN_TITLE_PREFIX、MAIL_SUBJECT）');
+    Logger.log('✗ 必要な設定値が取得できませんでした（CAMPAIGN_TITLE_PREFIX、ANNOUNCEMENT_TITLE）');
     return null;
   }
   

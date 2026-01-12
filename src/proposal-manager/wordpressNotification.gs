@@ -17,10 +17,10 @@ function createEventAnnouncementPost() {
     }
     
     // 投稿タイトルを生成
-    const title = mapping[MAPPING_KEYS.MAIL_SUBJECT];
-    
+    const title = mapping[MAPPING_KEYS.ANNOUNCEMENT_TITLE];
+
     if (!title) {
-      throw new Error('メールタイトル（MAIL_SUBJECT）が設定されていません。スプレッドシートを確認してください。');
+      throw new Error('開催告知タイトル（ANNOUNCEMENT_TITLE）が設定されていません。スプレッドシートを確認してください。');
     }
     
     // 投稿内容を取得
