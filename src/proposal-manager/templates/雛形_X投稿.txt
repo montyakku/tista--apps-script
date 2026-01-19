@@ -4,14 +4,14 @@
 <!--#SUB_TITLE#-->
 
 [ゲスト]
-<!--#GUEST_TO_TXT#-->
+<!--#GUEST_TO_TEXT#-->
 
 [開催日]
 <!--#DATE#--> <!--#TIME#-->
 
 [場所]
 <!--#ONLINE_PLACE_PLAIN_TEXT#-->
-<!--#OFFLINE_PLACE_PLAIN_TEXT#-->
+<!--#OFFLINE_PLACE_WITH_URL#-->
 
 [申し込み期限]
 <!--#ONLINE_DEADLINE_IN_X#-->
