@@ -96,7 +96,7 @@ obfuscate: clean ## Obfuscate .gs files from src to dist
 		cp $$temp_out $$dist_file && \
 		rm -f $$temp_js $$temp_out; \
 	done
-	@find $(SRC_DIR) -type f ! -name "*.gs" | while read file; do \
+	@find $(SRC_DIR) -type f ! -name "*.gs" ! -path "*/templates/*" | while read file; do \
 		rel_path=$${file#$(SRC_DIR)/}; \
 		dist_file=$(DIST_DIR)/$$rel_path; \
 		dist_dir=$$(dirname $$dist_file); \

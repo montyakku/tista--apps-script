@@ -13,12 +13,17 @@ const MAPPING_KEYS = {
   ANNOUNCEMNT_X_URL: '<!--#ANNOUNCEMNT_X_URL#-->',
   CAPTION_URL: '<!--#CAPTION_URL#-->',
   POST_SLUG: '<!--#POST_SLUG#-->',
-  WP_MEDIA_ID: '<!--#WP_MEDIA_ID#-->'
+  WP_MEDIA_ID: '<!--#WP_MEDIA_ID#-->',
+  SPEAKERS: '<!--#SPEAKERS#-->',
+  SPEAKER_EMAILS: '<!--#SPEAKER_EMAILS#-->',
+  SPEAKER_MAIL_RECIPIENT_NAME: '<!--#SPEAKER_MAIL_RECIPIENT_NAME#-->',
+  SPEAKER_CONFIRM_MAIL_SUBJECT: '<!--#SPEAKER_CONFIRM_MAIL_SUBJECT#-->'
 };
 
 const FILE_NAMES = {
   SURVEY_EMAIL: '参加者アンケート.txt',
-  EVENT_ANNOUNCEMENT_TEMPLATE: '開催告知メール.html'
+  EVENT_ANNOUNCEMENT_TEMPLATE: '開催告知メール.html',
+  SPEAKER_CONFIRMATION_EMAIL: '登壇者確認メール.txt'
 };
 
 const SEGMENT_NAMES = {
@@ -68,7 +73,7 @@ function getFileContent(fileName) {
 
 /**
  * スプレッドシートからマッピングデータを取得
- * @returns {Object|null} - マッピングデータ (キー: 置換対象文字列, 値: processedValue)
+ * @returns {Object|null} - マッピングデータ (キー: 置換対象文字列, 値: 値)
  */
 function getMappingData() {
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
@@ -84,25 +89,10 @@ function getMappingData() {
 
   data.forEach(row => {
     const key = row[0]; // A列: 置換対象文字列
-    const value = String(row[1] || "" ); // B列: 置き換える文字列
+    const value = String(row[1] || ""); // B列: 置き換える文字列
 
-    const newlinePrefix = value === "" ? "" : row[2] || ""; // C列: 各行の先頭に付け加える文字列
-    const newlineSuffix = value === "" ? "" : row[3] || ""; // D列: 各行の末尾に付け加える文字列
-
-    // 改行の有無で処理を分岐
-    let processedValue;
-
-    if (value.includes("\n")) {
-      // 改行がある場合
-      processedValue = value
-        .split("\n")
-        .map(line => `${newlinePrefix}${line}${newlineSuffix || "<br />"}`)
-        .join("");
-    } else {
-      // 改行がない場合
-      processedValue = `${newlinePrefix}${value}${newlineSuffix}`;
-    }
-    mapping[key] = processedValue;
+    // そのまま値を格納（改行処理はprocessTemplateFileで行う）
+    mapping[key] = value;
   });
 
   Logger.log("マッピングデータを正常に取得しました。");
