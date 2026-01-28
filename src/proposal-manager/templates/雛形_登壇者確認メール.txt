@@ -1,3 +1,4 @@
+<pre>
 <!--#SPEAKER_MAIL_RECIPIENT_NAME#-->
 
 いつも大変お世話になっております。
@@ -13,12 +14,11 @@ CELLARR 運営事務局です。
 集合時間（登壇者・運営）： <!--#ARRIVALl_TIME#-->
 
 会場：
-<!--#OFFLINE_PLACE_PLAIN_TEXT#-->
+<!--#OFFLINE_PLACE_WITH_URL#-->
 <!--#ONLINE_PLACE_PLAIN_TEXT#-->
-Zoom URL：
-<!--#ZOOM_URL-->
-ミーティングID: <!--#ZOOM_MEETING_ID-->
-パスコード: <!--#ZOOM_PASSCODE-->
+    - Zoom URL： <!--#ZOOM_URL-->
+    - ミーティングID: <!--#ZOOM_MEETING_ID-->
+    - パスコード: <!--#ZOOM_PASSCODE-->
 
 
 ■ タイムスケジュール
@@ -26,21 +26,28 @@ Zoom URL：
 
 
 ■ 告知ページ
-・CELLARR：
-    <!--#ANNOUNCEMENT_PAGE_URL-->
-・X（旧Twitter）：
-    <!--#ANNOUNCEMNT_X_URL#-->
-・BARREL：
-    <!--#ANNOUNCEMNT_BARREL_URL#-->
+    - CELLARR： <!--#ANNOUNCEMENT_PAGE_URL-->
+    - X (旧Twitter): <!--#ANNOUNCEMNT_X_URL#-->
+    - BARREL: <!--#ANNOUNCEMNT_BARREL_URL#-->
 
 
 ■ 緊急連絡先
-090-1147-2266（事務局 / 辻）
+090-1147-2266 (事務局 / 辻) 
 
 ―――――――――――――――――――――――――――――――
 ご不明な点やご質問等ございましたら、お気軽にご連絡くださいませ。
 それでは、明日お会いできるのを楽しみにしております。
 何卒よろしくお願い申し上げます。
 
-TSUKURU株式会社　https://tskru.jp/
-TisTa株式会社　https://tista.co.jp/
+CELLARR 運営事務局
+    - Mail: info@tista.co.jp
+    - Web: https://cellarr365.com/
+
+TisTa株式会社:　https://tista.co.jp/
+TSUKURU株式会社:　https://tskru.jp/
+
+----------
+<pre>
+[Sender_Name]
+[Sender_Address],[Sender_City],[Sender_State],[Sender_Zip]
+<a href="<%asm_group_unsubscribe_raw_url%>">Unsubscribe</a> - <a href="<%asm_preferences_raw_url%>">Unsubscribe Preferences</a>

@@ -1,44 +1,48 @@
 // 共通定数はutils.gsで定義済み
 
+// テンプレートファイル設定
+const SURVEY_TEMPLATE = {
+  FILE_ID: "12PZeHVzJ6i9bXtYzB_DjnMcvz9LwQRHi",
+  NEWLINE: "<br>"
+};
+
 /**
- * スプレッドシートから設定データを取得
- * @returns {Object|null} - 設定データ
+ * アンケートキャンペーン作成を実行
+ * マッピング取得→テンプレート生成→キャンペーン作成を一気通貫で実行
  */
-function getSettingsFromSpreadsheet() {
+function surveyRun() {
+  Logger.log('=== Survey: アンケートキャンペーン作成開始 ===');
+
+  // 1. マッピングデータを取得
   const mapping = getMappingData();
-  if (!mapping) {
-    return null;
-  }
 
-  const settings = {
-    eventDate: mapping[MAPPING_KEYS.DATE],
-    surveyMailTitle: mapping[MAPPING_KEYS.SURVEY_MAIL_TITLE],
-    campaignTitlePrefix: mapping[MAPPING_KEYS.CAMPAIGN_TITLE_PREFIX]
-  };
+  // 2. テンプレート生成
+  processTemplateFile(SURVEY_TEMPLATE.FILE_ID, mapping, SURVEY_TEMPLATE.NEWLINE);
 
-  return settings;
-}
+  // 3. 必要な値を取得してキャンペーン作成
+  const eventDate = mapping[MAPPING_KEYS.DATE];
+  const subject = mapping[MAPPING_KEYS.SURVEY_MAIL_TITLE];
+  const campaignTitlePrefix = mapping[MAPPING_KEYS.CAMPAIGN_TITLE_PREFIX];
 
-function createSurveyCampaigns() {
-  Logger.log('=== Creating Survey Campaigns (Draft) ===');
-  
-  const settings = getSettingsFromSpreadsheet();
-  if (!settings || !settings.eventDate || !settings.surveyMailTitle || !settings.campaignTitlePrefix) {
-    Logger.log('✗ 必要な設定値が取得できませんでした（DATE、SURVEY_MAIL_TITLE、CAMPAIGN_TITLE_PREFIX）');
-    return null;
+  if (!eventDate || !subject || !campaignTitlePrefix) {
+    throw new Error('必要な設定値が取得できませんでした（DATE、SURVEY_MAIL_TITLE、CAMPAIGN_TITLE_PREFIX）');
   }
 
   const emailContent = getFileContent(FILE_NAMES.SURVEY_EMAIL);
-  if (!emailContent) {
-    Logger.log('✗ Failed to load email content');
-    return null;
-  }
-  
+  buildSurveyCampaigns(eventDate, subject, campaignTitlePrefix, emailContent);
+}
+
+/**
+ * アンケートキャンペーンを構築
+ * @param {string} eventDate - イベント日付（例: "2026年1月25日"）
+ * @param {string} subject - メール件名
+ * @param {string} campaignTitlePrefix - キャンペーン名プレフィックス
+ * @param {string} emailContent - メール本文
+ * @throws {Error} キャンペーン作成に失敗した場合
+ */
+function buildSurveyCampaigns(eventDate, subject, campaignTitlePrefix, emailContent) {
   // テキストコンテンツの改行を<br>タグに変換
   const htmlEmailContent = emailContent.replace(/\n/g, '<br>');
-
-  const eventDate = settings.eventDate;
-  const subject = settings.surveyMailTitle;
   
   // イベント日付をDateオブジェクトに変換（日本時間として明示的に作成）
   const dateString = eventDate.replace(/(\d{4})年(\d{1,2})月(\d{1,2})日/, '$1/$2/$3');
@@ -90,10 +94,9 @@ function createSurveyCampaigns() {
 
     const segmentName = `${eventDateYYYYMMDD}_${SEGMENT_NAMES.SURVEY_PENDING}`;
     const segmentId = SendGridLibrary.createSegment(segmentName, segmentConditions);
-    
+
     if (!segmentId) {
-      Logger.log('✗ Failed to create segment');
-      return null;
+      throw new Error('Failed to create segment');
     }
 
     const campaignPrefix = settings.campaignTitlePrefix;
@@ -141,38 +144,28 @@ function createSurveyCampaigns() {
       survey3ScheduleTime
     );
 
-    const results = [];
-    
-    if (survey1CampaignId) {
-      Logger.log(`✓ Survey1 campaign draft created: ${survey1CampaignId}`);
-      results.push({ type: 'survey1', id: survey1CampaignId, name: survey1CampaignName });
-    } else {
-      Logger.log('✗ Failed to create survey1 campaign');
+    if (!survey1CampaignId) {
+      throw new Error('Failed to create survey1 campaign');
     }
+    Logger.log(`✓ Survey1 campaign draft created: ${survey1CampaignId}`);
 
-    if (survey2CampaignId) {
-      Logger.log(`✓ Survey2 campaign draft created: ${survey2CampaignId}`);
-      results.push({ type: 'survey2', id: survey2CampaignId, name: survey2CampaignName });
-    } else {
-      Logger.log('✗ Failed to create survey2 campaign');
+    if (!survey2CampaignId) {
+      throw new Error('Failed to create survey2 campaign');
     }
+    Logger.log(`✓ Survey2 campaign draft created: ${survey2CampaignId}`);
 
-    if (survey3CampaignId) {
-      Logger.log(`✓ Survey3 campaign draft created: ${survey3CampaignId}`);
-      results.push({ type: 'survey3', id: survey3CampaignId, name: survey3CampaignName });
-    } else {
-      Logger.log('✗ Failed to create survey3 campaign');
+    if (!survey3CampaignId) {
+      throw new Error('Failed to create survey3 campaign');
     }
+    Logger.log(`✓ Survey3 campaign draft created: ${survey3CampaignId}`);
 
     Logger.log(`Event Date: ${eventDate}`);
     Logger.log(`Subject: ${subject}`);
     Logger.log(`Target: Attended ${eventDate} but no survey response`);
-
-    return results;
-    
+    Logger.log('✓ アンケートキャンペーン作成完了');
   } catch (error) {
     Logger.log(`✗ Error creating campaigns: ${error.message}`);
-    return null;
+    throw error;
   }
 }
 

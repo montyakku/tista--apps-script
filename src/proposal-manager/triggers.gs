@@ -20,15 +20,14 @@ function onOpen() {
   const ui = SpreadsheetApp.getUi();
 
   ui.createMenu('⚡自動操作ボタン')
-    .addItem('色々作成', 'generateAllFiles')
-    .addItem('開催告知メール', 'createEventAnnouncementCampaign')
+    .addItem('開催告知メール', 'eventAnnouncementRun')
     .addItem('開催告知ページ', 'createEventAnnouncementPost')
-    .addSubMenu(ui.createMenu('X投稿')
-      .addItem('即時投稿', 'postToX')
-      .addItem('予約投稿', 'schedulePostToX'))
+    .addItem('X投稿', 'xPostRun')
     .addItem('BARREL連携', 'postDiscordNotification')
-    .addItem('登壇者確認メール', 'createSpeakerConfirmationCampaigns')
-    .addItem('アンケート', 'createSurveyCampaigns')
+    .addItem('登壇者確認メール', 'speakerConfirmationRun')
+    .addItem('前日参加者向けメール', 'dayBeforeParticipationRun')
+    .addItem('スポット参加メール', 'spotParticipationRun')
+    .addItem('アンケート', 'surveyRun')
     .addToUi();
 
   // ファイル名の自動更新

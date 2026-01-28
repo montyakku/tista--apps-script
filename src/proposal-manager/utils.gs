@@ -23,11 +23,14 @@ const MAPPING_KEYS = {
 const FILE_NAMES = {
   SURVEY_EMAIL: '参加者アンケート.txt',
   EVENT_ANNOUNCEMENT_TEMPLATE: '開催告知メール.html',
-  SPEAKER_CONFIRMATION_EMAIL: '登壇者確認メール.txt'
+  SPEAKER_CONFIRMATION_EMAIL: '登壇者確認メール.txt',
+  DAY_BEFORE_PARTICIPATION_EMAIL: '当日メール.txt'
 };
 
 const SEGMENT_NAMES = {
-  SURVEY_PENDING: 'アンケート未回答'
+  SURVEY_PENDING: 'アンケート未回答',
+  DAY_BEFORE_PARTICIPATION: '参加者',
+  SPEAKER: '登壇者'
 };
 
 const SENDGRID_IDS = {
@@ -47,41 +50,61 @@ const FILE_IDS = {
 /**
  * スプレッドシートと同階層のファイルを読み取る
  * @param {string} fileName - ファイル名
- * @returns {string|null} ファイル内容（失敗時はnull）
+ * @returns {string} ファイル内容
+ * @throws {Error} ファイルが見つからない、または読み取りに失敗した場合
  */
 function getFileContent(fileName) {
   try {
     const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
     const folder = DriveApp.getFileById(spreadsheet.getId()).getParents().next();
-    
+
     const files = folder.getFilesByName(fileName);
     if (!files.hasNext()) {
-      Logger.log(`✗ File "${fileName}" not found in spreadsheet directory`);
-      return null;
+      const error = `File "${fileName}" not found in spreadsheet directory`;
+      Logger.log(`✗ ${error}`);
+      throw new Error(error);
     }
-    
+
     const file = files.next();
     const content = file.getBlob().getDataAsString('UTF-8');
     Logger.log(`✓ Successfully loaded file content from "${fileName}"`);
     return content;
-    
+
   } catch (error) {
-    Logger.log(`✗ Error reading file "${fileName}": ${error.message}`);
-    return null;
+    const errorMsg = `Error reading file "${fileName}": ${error.message}`;
+    Logger.log(`✗ ${errorMsg}`);
+    throw new Error(errorMsg);
   }
 }
 
 /**
  * スプレッドシートからマッピングデータを取得
- * @returns {Object|null} - マッピングデータ (キー: 置換対象文字列, 値: 値)
+ * 同一実行内では1回だけスプレッドシートを読み込み、以降はキャッシュから取得
+ * @param {boolean} forceRefresh - キャッシュを無視して強制的に再取得する場合はtrue
+ * @returns {Object} - マッピングデータ (キー: 置換対象文字列, 値: 値)
+ * @throws {Error} シートが見つからない場合
  */
-function getMappingData() {
+function getMappingData(forceRefresh = false) {
+  const CACHE_KEY = 'mapping_data_cache';
+  const cache = CacheService.getScriptCache();
+
+  // キャッシュから取得を試みる
+  if (!forceRefresh) {
+    const cachedData = cache.get(CACHE_KEY);
+    if (cachedData) {
+      Logger.log("✓ マッピングデータをキャッシュから取得しました");
+      return JSON.parse(cachedData);
+    }
+  }
+
+  // キャッシュがない場合、スプレッドシートから取得
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   const sheetName = "自動生成用マッピング";
   const sheet = spreadsheet.getSheetByName(sheetName);
   if (!sheet) {
-    Logger.log(`シート "${sheetName}" が見つかりません。`);
-    return null;
+    const error = `シート "${sheetName}" が見つかりません`;
+    Logger.log(`✗ ${error}`);
+    throw new Error(error);
   }
 
   const data = sheet.getDataRange().getValues();
@@ -95,7 +118,74 @@ function getMappingData() {
     mapping[key] = value;
   });
 
-  Logger.log("マッピングデータを正常に取得しました。");
+  Logger.log("✓ マッピングデータを正常に取得しました");
+
+  // キャッシュに保存（600秒 = 10分間有効）
+  try {
+    cache.put(CACHE_KEY, JSON.stringify(mapping), 600);
+  } catch (error) {
+    Logger.log(`⚠ キャッシュへの保存に失敗: ${error.message}`);
+  }
+
   return mapping;
+}
+
+/**
+ * テンプレートファイルを処理して置換後のファイルを出力
+ * @param {string} templateFileId - テンプレートファイルのID
+ * @param {Object} mapping - マッピングデータ (キー: 置換対象文字列, 値: 値)
+ * @param {string} newlineReplacement - 改行を置換する文字列（例: "<br />" または "\n"）
+ * @returns {string} 生成されたファイル名
+ * @throws {Error} ファイル取得や処理に失敗した場合
+ */
+function processTemplateFile(templateFileId, mapping, newlineReplacement) {
+  try {
+    // テンプレートファイルを取得
+    const file = DriveApp.getFileById(templateFileId);
+    const originalFileName = file.getName();
+    let fileContent = file.getBlob().getDataAsString();
+
+    // ファイル内容を置換
+    for (const [key, value] of Object.entries(mapping)) {
+      const regex = new RegExp(key, "g");
+      if (!fileContent.includes(key)) {
+        continue;
+      }
+
+      // 値に改行が含まれている場合、指定された改行置換文字列で置き換え
+      let replacementValue = value;
+      if (value.includes("\n")) {
+        replacementValue = value.replace(/\n/g, newlineReplacement);
+      }
+
+      fileContent = fileContent.replace(regex, replacementValue);
+    }
+
+    // 出力ファイル名を生成（「雛形_」を省略）
+    const outputFileName = originalFileName.startsWith("雛形_")
+      ? originalFileName.replace(/^雛形_/, "")
+      : originalFileName;
+
+    // 置換後のファイルを新しいファイルとしてスプレッドシートと同じフォルダに出力
+    const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+    const folder = DriveApp.getFileById(spreadsheet.getId()).getParents().next();
+
+    // 同名ファイルが存在するか確認して削除
+    const existingFiles = folder.getFilesByName(outputFileName);
+    while (existingFiles.hasNext()) {
+      existingFiles.next().setTrashed(true);
+    }
+
+    // ファイルの拡張子に応じてMimeTypeを設定
+    const mimeType = outputFileName.endsWith('.html') ? MimeType.HTML : MimeType.PLAIN_TEXT;
+    folder.createFile(outputFileName, fileContent, mimeType);
+
+    Logger.log(`✓ "${outputFileName}" を生成しました`);
+    return outputFileName;
+  } catch (error) {
+    const errorMsg = `テンプレートファイル (ID: ${templateFileId}) の処理に失敗: ${error.message}`;
+    Logger.log(`✗ ${errorMsg}`);
+    throw new Error(errorMsg);
+  }
 }
 
