@@ -5,7 +5,7 @@
 // テンプレートファイル設定
 const DAY_BEFORE_PARTICIPATION_TEMPLATE = {
   FILE_ID: "1naPnuFyaMQQlJj1ZhVLbmnLWhmZ114JJ",
-  NEWLINE: "<br>"
+  NEWLINE: "\n"
 };
 
 /**
@@ -50,8 +50,6 @@ function buildDayBeforeParticipationCampaign(campaignTitlePrefix, eventDate, ema
   Logger.log('=== 前日参加者向けメールキャンペーン構築開始 ===');
 
   try {
-    // テキストコンテンツの改行を<br>タグに変換
-    const htmlEmailContent = emailContent.replace(/\n/g, '<br>');
 
     // イベント日付をDateオブジェクトに変換（日本時間として明示的に作成）
     const dateString = eventDate.replace(/(\d{4})年(\d{1,2})月(\d{1,2})日/, '$1/$2/$3');
@@ -99,7 +97,7 @@ function buildDayBeforeParticipationCampaign(campaignTitlePrefix, eventDate, ema
     const campaignId = SendGridLibrary.createCampaignWithContent(
       campaignName,
       subject,
-      htmlEmailContent,
+      emailContent,
       segmentId,
       SENDGRID_IDS.SENDER_ID,
       SENDGRID_IDS.UNSUBSCRIBE_GROUP_ID,

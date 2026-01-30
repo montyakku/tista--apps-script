@@ -24,7 +24,7 @@ const FILE_NAMES = {
   SURVEY_EMAIL: '参加者アンケート.txt',
   EVENT_ANNOUNCEMENT_TEMPLATE: '開催告知メール.html',
   SPEAKER_CONFIRMATION_EMAIL: '登壇者確認メール.txt',
-  DAY_BEFORE_PARTICIPATION_EMAIL: '当日メール.txt'
+  DAY_BEFORE_PARTICIPATION_EMAIL: '前日参加者向けメール.txt'
 };
 
 const SEGMENT_NAMES = {
